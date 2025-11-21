@@ -13,10 +13,11 @@ import { useNavigate } from "react-router-dom";
 import * as UserService from "../../services/UserService.js";
 import { useMutationHooks } from "../../hooks/userMutationHook";
 import * as message from "../../components/Message/Message.js";
+import logoSignIn from "../../assets/images/logo-signin.jfif";
+
 const SignUpPage = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
-  const imageLogo =
-    "https://hakingdoms.s3.ap-southeast-2.amazonaws.com/images/news-3.jpg";
+  const imageLogo = logoSignIn;
   const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
