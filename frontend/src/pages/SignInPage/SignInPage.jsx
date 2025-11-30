@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import React from "react";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import InputForm from "../../components/InputForm/InputForm";
+import logo from "../../assets/images/logo.png";
 import {
   WrapperContainerLeft,
   WrapperContainerRight,
@@ -30,8 +31,7 @@ const SignInPage = () => {
     });
     // console.log("signin", email, password);
   };
-  const imageLogo =
-    "https://hakingdoms.s3.ap-southeast-2.amazonaws.com/images/logo-signin.jfif";
+  const imageLogo = logo;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
@@ -42,7 +42,7 @@ const SignInPage = () => {
     setPassword(value);
   };
   const mutation = useMutationHooks((data) => UserService.loginUser(data));
-  const { data, isSuccess } = mutation;
+  const { data, isLoading, isSuccess } = mutation;
   console.log("location", location);
   useEffect(() => {
     if (data?.status !== "ERR" && typeof data?.status !== "undefined") {
@@ -60,7 +60,7 @@ const SignInPage = () => {
         }
       }
     }
-  }, [data?.status, data?.access_token, location?.state, navigate, handleGetDetailsUser, isSuccess]);
+  }, [isSuccess]);
   const handleGetDetailsUser = async (id, token) => {
     const res = await UserService.getDetailsUser(id, token);
     // console.log("data", res?.data);
