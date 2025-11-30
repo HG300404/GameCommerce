@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import React from "react";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import InputForm from "../../components/InputForm/InputForm";
+import logo from "../../assets/images/logo.png";
 import {
   WrapperContainerLeft,
   WrapperContainerRight,
@@ -13,11 +14,9 @@ import { useNavigate } from "react-router-dom";
 import * as UserService from "../../services/UserService.js";
 import { useMutationHooks } from "../../hooks/userMutationHook";
 import * as message from "../../components/Message/Message.js";
-import logoSignIn from "../../assets/images/logo-signin.jfif";
-
 const SignUpPage = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
-  const imageLogo = logoSignIn;
+  const imageLogo = logo;
   const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
@@ -58,7 +57,7 @@ const SignUpPage = () => {
     } else if (isError) {
       message.error();
     }
-  }, [isSuccess, isError, handleNavigateSignIn]);
+  }, [isSuccess, isError]);
   const h1Style = {
     display: "flex",
     justifyContent: "center",
