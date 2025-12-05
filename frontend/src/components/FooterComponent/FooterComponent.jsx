@@ -16,9 +16,9 @@ import {
 
 import ButtonComponent from "../ButtonComponent/ButtonComponent";
 import InputForm from "../InputForm/InputForm";
+import imageLogo from "../../assets/images/logo.png";
 
-const logo =
-  "https://hakingdoms.s3.ap-southeast-2.amazonaws.com/images/logo.png";
+const logo = imageLogo;
 const FooterComponent = () => {
   const styleLi = {
     color: "#fff",

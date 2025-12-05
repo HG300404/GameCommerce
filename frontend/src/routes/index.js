@@ -1,11 +1,12 @@
 import SignInPage from "../pages/SignInPage/SignInPage.jsx";
 import SignUpPage from "../pages/SignUpPage/SignUpPage.jsx";
+import HomePage from "../pages/HomePage/HomePage.jsx";
 
 export const routes = [
   {
     path: "/",
-    page: SignInPage,
-    isShowHeader: false,
+    page: HomePage,
+    isShowHeader: true,
   },
   {
     path: "/sign-in",
