@@ -8,16 +8,21 @@ import {
 } from "@ant-design/icons";
 import HeaderComponent from "../../components/HeaderComponent/HeaderComponent";
 import AdminGame from "../../components/AdminGame/AdminGame";
+import AdminUser from "../../components/AdminUser/AdminUser";
 
 const AdminPage = () => {
   const items = [
     getItem("Game", "games", <AppstoreOutlined />),
+    getItem("User", "users", <UserOutlined />),
+
   ];
 
   const [keySelected, setKeySelected] = useState("");
 
   const renderPage = (key) => {
     switch (key) {
+      case "users":
+        return <AdminUser />;
       case "games":
         return <AdminGame />;
       default:
