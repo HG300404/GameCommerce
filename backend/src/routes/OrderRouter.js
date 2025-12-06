@@ -8,6 +8,6 @@ const {
 
 router.post("/create", orderController.createOrder);
 router.get("/get-order-details/:id", orderController.getDetailsOrder);
-router.get("/getAllOrder", orderController.getAllOrder);
+router.get("/getAllOrder  ", orderController.getAllOrder);
 
 module.exports = router;
