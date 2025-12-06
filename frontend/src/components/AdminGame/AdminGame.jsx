@@ -49,7 +49,8 @@ const AdminGame = () => {
   });
 
   const [typeGames, setTypeGames] = useState({});
-  const [form] = Form.useForm();
+  const [formAdd] = Form.useForm();      // Form riêng cho Add modal
+  const [formUpdate] = Form.useForm();   // Form riêng cho Update modal
 
   const mutation = useMutationHooks((data) => GameService.createGame(data));
   const { data, isLoading, isSuccess, isError } = mutation;
@@ -162,8 +163,8 @@ const AdminGame = () => {
     // setIsLoadingUpdate(false);
   };
   useEffect(() => {
-    form.setFieldsValue(stateGameDetails);
-  }, [form, stateGameDetails]);
+    formUpdate.setFieldsValue(stateGameDetails);
+  }, [formUpdate, stateGameDetails]);
 
   useEffect(() => {
     if (rowSelected && isOpenDrawer) {
@@ -415,7 +416,7 @@ const AdminGame = () => {
       selled: "",
       image: "",
     });
-    form.resetFields();
+    formUpdate.resetFields();
   };
 
   useEffect(() => {
@@ -468,7 +469,7 @@ const AdminGame = () => {
       selled: "",
       image: "",
     });
-    form.resetFields();
+    formAdd.resetFields();
   };
   const handleCancelDelete = () => {
     setIsModalOpenDelete(false);
@@ -485,6 +486,7 @@ const AdminGame = () => {
     );
   };
   const onFinish = () => {
+    console.log("ass");
     const params = {
       name: stateGame.name,
       type: stateGame.type === "add_type" ? stateGame.newType : stateGame.type,
@@ -611,7 +613,7 @@ const AdminGame = () => {
           initialValues={{ remember: true }}
           onFinish={onFinish}
           autoComplete="off"
-          form={form}
+          form={formAdd}
         >
           <Form.Item
             label="Name"
@@ -762,7 +764,7 @@ const AdminGame = () => {
           style={{ maxWidth: 600 }}
           onFinish={onUpdateGame}
           autoComplete="on"
-          form={form}
+          form={formUpdate}
         >
           <Form.Item
             label={<span>Name:</span>}

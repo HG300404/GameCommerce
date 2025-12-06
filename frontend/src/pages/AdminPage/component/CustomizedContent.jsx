@@ -16,7 +16,7 @@ const CustomizedContent = (props) => {
             gap: 20, 
             justifyContent: 'center', 
             alignItems: 'center',
-            borderRadius: '10px',
+            borderRadius: '10pxs',
             cursor: 'pointer'
           }}
             onClick={() => setKeySelected(item)}

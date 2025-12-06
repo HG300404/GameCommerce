@@ -2,7 +2,6 @@ import { Table } from "antd";
 import React, { useMemo, useState } from "react";
 import Loading from "../LoadingComponent/Loading";
 import { Excel } from "antd-table-saveas-excel";
-import "./TableComponent.css";
 const TableComponent = (props) => {
   const {
     handleDeleteMany,
@@ -15,7 +14,10 @@ const TableComponent = (props) => {
   const [rowSelectedKeys, setRowSelectedKeys] = useState([]);
   const newColumnExport = useMemo(() => {
     const filter = columns?.filter((col) => col.dataIndex != "action");
-    return filter;
+    return filter.map(col => {
+      const { render, ...rest } = col;
+      return rest;
+    });
   }, [columns]);
   console.log("newColumnExport", newColumnExport);
   // rowSelection object indicates the need for row selection
@@ -67,7 +69,6 @@ const TableComponent = (props) => {
         }}
         columns={columns}
         dataSource={data}
-        rowClassName={(record, index) => index % 2 === 0 ? 'table-row-light' : 'table-row-dark'}
         {...props}
       />
     </>
