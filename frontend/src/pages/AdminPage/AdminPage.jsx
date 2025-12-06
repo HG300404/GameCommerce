@@ -9,11 +9,13 @@ import {
 import HeaderComponent from "../../components/HeaderComponent/HeaderComponent";
 import AdminGame from "../../components/AdminGame/AdminGame";
 import AdminUser from "../../components/AdminUser/AdminUser";
+import AdminOrder from "../../components/AdminOrder/AdminOrder";
 
 const AdminPage = () => {
   const items = [
     getItem("Game", "games", <AppstoreOutlined />),
     getItem("User", "users", <UserOutlined />),
+    getItem("Order", "orders", <FileTextOutlined />),
 
   ];
 
