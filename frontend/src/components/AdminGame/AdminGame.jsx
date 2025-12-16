@@ -49,7 +49,7 @@ const AdminGame = () => {
   });
 
   const [typeGames, setTypeGames] = useState({});
-  const [formAdd] = Form.useForm();      // Form riêng cho Add modal
+  const [formAdd] = Form.useForm();
   const [formUpdate] = Form.useForm();   // Form riêng cho Update modal
 
   const mutation = useMutationHooks((data) => GameService.createGame(data));
