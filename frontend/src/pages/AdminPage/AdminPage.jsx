@@ -27,6 +27,8 @@ const AdminPage = () => {
         return <AdminUser />;
       case "games":
         return <AdminGame />;
+      case "orders":
+        return <AdminOrder />;
       default:
         return <></>;
     }
