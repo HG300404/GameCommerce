@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Badge, Col, Popover } from "antd";
+import { Badge, Button, Col, Popover } from "antd";
 import {
   WrapperHeader,
   WrapperHeaderAccount,
@@ -13,13 +13,16 @@ import {
 } from "@ant-design/icons";
 import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch";
 
-import { useNavigate } from "react-router-dom";
+import ButtonComponent from "../ButtonComponent/ButtonComponent";
+
+import { useNavigate, Link } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import * as UserService from "../../services/UserService.js";
 import { resetUser } from "../../redux/slides/userSlide.js";
 import Loading from "../LoadingComponent/Loading";
 import { searchGame } from "../../redux/slides/gameSlide";
+import logoImg from "../../assets/images/logo.png";
 
 // const sizeLi = {
 //   size: "larger",
@@ -33,8 +36,7 @@ import { searchGame } from "../../redux/slides/gameSlide";
 //   color: "red",
 // };
 
-const logo =
-  "https://hakingdoms.s3.ap-southeast-2.amazonaws.com/images/logo.png";
+const logo = logoImg;
 
 const HeaderComponent = ({
   isHiddenSearch = false,
@@ -195,7 +197,7 @@ const HeaderComponent = ({
 
           {!isHiddenCart && (
             <div
-              onClick={() => navigate(`/order/${user?.id}`)}
+              onClick={() => navigate('/order')}
               style={{ cursor: "pointer" }}
             >
               <Badge count={order?.orderItems?.length} size="small">
