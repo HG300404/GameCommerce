@@ -1,12 +1,15 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { routes } from "./routes";
+import { useQuery } from "@tanstack/react-query";
 import DefaultComponent from "./components/DefaultComponent/DefaultComponent";
 import { isJsonString } from "./utils";
 import { jwtDecode } from "jwt-decode";
 import * as UserService from "../src/services/UserService.js";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "./redux/slides/userSlide";
+import axios from "axios";
+import Loading from "./components/LoadingComponent/Loading";
 function App() {
   // useEffect(() => {
   //   fetchApi();
@@ -25,8 +28,7 @@ function App() {
     setIsLoading(true);
     const { storageData, decoded } = handleDecoded();
     console.log("decoded", decoded);
-    // Chỉ gọi API khi có token hợp lệ và decoded.id tồn tại
-    if (decoded?.id && storageData) {
+    if (user?.id) {
       handleGetDetailsUser(decoded?.id, storageData);
     }
     setIsLoading(false);
