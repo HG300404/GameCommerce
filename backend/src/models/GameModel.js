@@ -12,6 +12,7 @@ const gameSchema = new mongoose.Schema(
     description: { type: String, require: true },
     discount: { type: Number, require: true },
     selled: { type: Number },
+    downloadUrl: { type: String }, // Google Drive download link
   },
   {
     timestamps: true,

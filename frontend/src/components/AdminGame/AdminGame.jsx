@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { WrapperHeader, WrapperUploadFile } from "./style";
-import { Button, Form, Modal, Select } from "antd";
+import { Button, Form, Modal, Select, Input } from "antd";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import TableComponent from "../TableComponent/TableComponent";
 
@@ -35,6 +35,7 @@ const AdminGame = () => {
     selled: "",
     image: "",
     newType: "",
+    downloadUrl: "",
   });
   const [stateGameDetails, setStateGameDetails] = useState({
     name: "",
@@ -46,6 +47,7 @@ const AdminGame = () => {
     discount: "",
     selled: "",
     image: "",
+    downloadUrl: "",
   });
 
   const [typeGames, setTypeGames] = useState({});
@@ -158,6 +160,7 @@ const AdminGame = () => {
         discount: res?.data?.discount,
         selled: res?.data?.selled,
         image: res?.data?.image,
+        downloadUrl: res?.data?.downloadUrl,
       });
     }
     // setIsLoadingUpdate(false);
@@ -415,6 +418,7 @@ const AdminGame = () => {
       discount: "",
       selled: "",
       image: "",
+      downloadUrl: "",
     });
     formUpdate.resetFields();
   };
@@ -423,6 +427,7 @@ const AdminGame = () => {
     if (isSuccess && data?.status === "OK") {
       message.success();
       handleCancel();
+      queryGame.refetch(); // Refresh table after creating game
     } else if (isError) {
       message.error();
     }
@@ -468,6 +473,7 @@ const AdminGame = () => {
       discount: "",
       selled: "",
       image: "",
+      downloadUrl: "",
     });
     formAdd.resetFields();
   };
@@ -497,6 +503,7 @@ const AdminGame = () => {
       discount: stateGame.discount,
       selled: stateGame.selled,
       image: stateGame.image,
+      downloadUrl: stateGame.downloadUrl,
     };
     mutation.mutate(params, {
       onSettled: () => {
@@ -715,10 +722,24 @@ const AdminGame = () => {
             name="description"
             rules={[{ required: true, message: "Please input description!" }]}
           >
-            <InputComponent
+            <Input.TextArea
               value={stateGame.description}
               onChange={handleOnchange}
               name="description"
+              rows={4}
+              placeholder="Enter game description..."
+            />
+          </Form.Item>
+          <Form.Item
+            label="Download Link"
+            name="downloadUrl"
+            rules={[{ required: false, message: "Please input download link!" }]}
+          >
+            <InputComponent
+              value={stateGame.downloadUrl}
+              onChange={handleOnchange}
+              name="downloadUrl"
+              placeholder="https://drive.google.com/file/d/..."
             />
           </Form.Item>
           <Form.Item
@@ -849,10 +870,24 @@ const AdminGame = () => {
             name="description"
             rules={[{ required: true, message: "Please input description!" }]}
           >
-            <InputComponent
+            <Input.TextArea
               value={stateGameDetails.description}
               onChange={handleOnchangeDetails}
               name="description"
+              rows={4}
+              placeholder="Enter game description..."
+            />
+          </Form.Item>
+          <Form.Item
+            label={<span>Download Link:</span>}
+            name="downloadUrl"
+            rules={[{ required: false, message: "Please input download link!" }]}
+          >
+            <InputComponent
+              value={stateGameDetails.downloadUrl}
+              onChange={handleOnchangeDetails}
+              name="downloadUrl"
+              placeholder="https://drive.google.com/file/d/..."
             />
           </Form.Item>
           <Form.Item

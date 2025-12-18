@@ -197,7 +197,7 @@ const HeaderComponent = ({
 
           {!isHiddenCart && (
             <div
-              onClick={() => navigate(`/order/${user?.id}`)}
+              onClick={() => navigate('/order')}
               style={{ cursor: "pointer" }}
             >
               <Badge count={order?.orderItems?.length} size="small">

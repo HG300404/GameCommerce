@@ -28,7 +28,21 @@ const OrderSuccess = () => {
           margin: "0 auto",
         }}
       >
-        <h3>Order success</h3>
+        <h3 style={{
+          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+          fontWeight: "bold",
+          fontSize: "42px",
+          textShadow: "0 4px 8px rgba(102, 126, 234, 0.3)",
+          marginBottom: "20px",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px"
+        }}>
+          ✅ Order Success
+        </h3>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <WrapperLeft>
             <WrapperInfo>

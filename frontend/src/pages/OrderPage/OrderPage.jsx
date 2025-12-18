@@ -160,6 +160,22 @@ const OrderPage = () => {
     }
   };
 
+  // Auto-populate user information when modal opens
+  useEffect(() => {
+    if (isOpenModalUpdateInfo) {
+      setStateUserDetails({
+        userName: user?.userName || "",
+        email: user?.email || "",
+        phone: user?.phone || "",
+      });
+      form.setFieldsValue({
+        userName: user?.userName || "",
+        email: user?.email || "",
+        phone: user?.phone || "",
+      });
+    }
+  }, [isOpenModalUpdateInfo, user, form]);
+
   return (
     <div style={{ with: "100%", height: "100vh" }}>
       <div
@@ -169,7 +185,21 @@ const OrderPage = () => {
           margin: "0 auto",
         }}
       >
-        <h3>Cart</h3>
+        <h3 style={{
+          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+          fontWeight: "bold",
+          fontSize: "42px",
+          textShadow: "0 4px 8px rgba(102, 126, 234, 0.3)",
+          marginBottom: "20px",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px"
+        }}>
+          🛒 Cart
+        </h3>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <WrapperLeft>
             <WrapperStyleHeader

@@ -12,6 +12,7 @@ const createGame = async (req, res) => {
       discount,
       selled,
       releasedDate,
+      downloadUrl,
     } = req.body;
 
     if (

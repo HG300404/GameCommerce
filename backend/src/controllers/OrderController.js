@@ -38,8 +38,32 @@ const getAllOrder = async (req, res) => {
     return res.status(404).json({ message: e });
   }
 };
+
+const handleCheckoutSuccess = async (req, res) => {
+  try {
+    const { orderId } = req.body;
+
+    if (!orderId) {
+      return res.status(400).json({
+        status: "ERR",
+        message: "Order ID is required"
+      });
+    }
+
+    const response = await OrderService.handleCheckoutSuccess(orderId);
+    return res.status(200).json(response);
+  } catch (e) {
+    console.error('Error in handleCheckoutSuccess:', e);
+    return res.status(500).json({
+      status: "ERR",
+      message: e.message || "Internal server error"
+    });
+  }
+};
+
 module.exports = {
   createOrder,
   getDetailsOrder,
   getAllOrder,
+  handleCheckoutSuccess,
 };

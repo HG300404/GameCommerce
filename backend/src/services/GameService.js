@@ -13,15 +13,16 @@ const createGame = (newGame) => {
       discount,
       selled,
       releasedDate,
+      downloadUrl,
     } = newGame;
     try {
       const checkGame = await Game.findOne({
         name: name,
       });
       if (checkGame != null) {
-        resolve({
-          status: "OK",
-          message: "The name of game is ready",
+        return resolve({
+          status: "ERR",
+          message: "The name of game already exists",
         });
       }
 
@@ -36,6 +37,7 @@ const createGame = (newGame) => {
         discount,
         selled,
         releasedDate,
+        downloadUrl,
       });
       if (createGame) {
         resolve({
