@@ -169,17 +169,57 @@ const PaymentPage = () => {
     }
   }, []);
 
-  const onSuccessPaypal = (details, data) => {
-    mutationOrder.mutate({
-      token: user?.access_token,
-      orderItems: order?.orderItemsSelected,
-      paymentMethod: payment,
-      totalPrice: total,
-      user: user?.id,
-      orderDate: order?.orderDate,
-      isPaid: true,
-      paidAt: details.update_time,
-    });
+  const onSuccessPaypal = async (details, data) => {
+    try {
+      // Tạo order trước
+      const orderResponse = await new Promise((resolve, reject) => {
+        mutationOrder.mutate(
+          {
+            token: user?.access_token,
+            orderItems: order?.orderItemsSelected,
+            paymentMethod: payment,
+            totalPrice: total,
+            user: user?.id,
+            orderDate: order?.orderDate,
+            isPaid: true,
+            paidAt: details.update_time,
+          },
+          {
+            onSuccess: (data) => resolve(data),
+            onError: (error) => reject(error),
+          }
+        );
+      });
+
+      if (orderResponse?.status === "OK" && orderResponse?.data?._id) {
+        // Gọi API checkout-success để gửi email và lấy download URL
+        const checkoutResponse = await OrderService.checkoutSuccess(
+          orderResponse.data._id,
+          user?.access_token
+        );
+
+        if (checkoutResponse?.success && checkoutResponse?.downloadUrl) {
+          // Xóa items đã order khỏi cart
+          const arrOrdered = [];
+          order?.orderItemsSelected?.forEach((element) => {
+            arrOrdered.push(element.game);
+          });
+          dispatch(removeAllOrderGame({ listChecked: arrOrdered }));
+
+          // Hiển thị popup thành công
+          message.success({
+            content: "🎉 Thanh toán thành công! Email xác nhận với link tải game đã được gửi đến hộp thư của bạn.",
+            duration: 5,
+          });
+
+          // Navigate to order success page
+          navigate('/orderSuccess');
+        }
+      }
+    } catch (error) {
+      console.error("Error in payment success:", error);
+      message.error("Có lỗi xảy ra. Vui lòng liên hệ support.");
+    }
   };
 
   if (!clientId) {

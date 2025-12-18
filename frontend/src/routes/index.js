@@ -39,6 +39,11 @@ export const routes = [
     isShowHeader: true,
   },
   {
+    path: "/order",
+    page: OrderPage,
+    isShowHeader: true,
+  },
+  {
     path: "/order/:id",
     page: OrderPage,
     isShowHeader: true,

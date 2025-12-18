@@ -38,3 +38,17 @@ export const getAllOrder = async (access_token) => {
   );
   return res.data;
 };
+
+export const checkoutSuccess = async (orderId, access_token) => {
+  const res = await axios.post(
+    `${process.env.REACT_APP_API_URL}/order/checkout-success`,
+    { orderId },
+    {
+      headers: {
+        token: `Bearer ${access_token}`,
+      },
+    }
+  );
+  return res.data;
+};
+
