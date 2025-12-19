@@ -79,6 +79,7 @@ const HeaderComponent = ({
     setUserAvatar(user?.avatar);
     setLoading(false);
   }, [user?.userName, user?.avatar]);
+
   const content = (
     <div>
       <WrapperContentPopup onClick={() => navigate("/profile-user")}>
@@ -98,7 +99,20 @@ const HeaderComponent = ({
 
   const onSearch = (e) => {
     setSearch(e.target.value);
-    dispatch(searchGame(e.target.value));
+  };
+
+  // Tự động reset về getAll khi xóa hết ký tự
+  useEffect(() => {
+    if (search === "") {
+      dispatch(searchGame(""));
+    }
+  }, [search, dispatch]);
+
+  // Hàm xử lý khi nhấn nút Search
+  const handleSearch = () => {
+    // Nếu search rỗng hoặc chỉ có khoảng trắng, dispatch với chuỗi rỗng để get all
+    const searchTerm = search?.trim() || "";
+    dispatch(searchGame(searchTerm));
   };
   return (
     <div
@@ -137,6 +151,7 @@ const HeaderComponent = ({
               textButton="Search"
               placeholder="Input search text"
               onChange={onSearch}
+              onButtonClick={handleSearch}
             />
           </Col>
         )}

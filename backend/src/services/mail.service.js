@@ -2,44 +2,44 @@ const nodemailer = require('nodemailer');
 
 // Cấu hình transporter với Gmail SMTP
 const createTransporter = () => {
-    return nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: process.env.EMAIL_USER, // Gmail address
-            pass: process.env.EMAIL_PASSWORD // Gmail App Password
-        }
-    });
+  return nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER, // Gmail address
+      pass: process.env.EMAIL_PASSWORD // Gmail App Password
+    }
+  });
 };
 
 // Gửi email xác nhận mua game
 const sendPurchaseConfirmationEmail = async (userEmail, orderDetails, downloadLinks) => {
-    try {
-        const transporter = createTransporter();
+  try {
+    const transporter = createTransporter();
 
-        // Tạo danh sách games từ orderItems với download buttons
-        const gamesList = orderDetails.orderItems
-            .map((item, index) => {
-                const downloadUrl = downloadLinks[index]?.downloadUrl || "https://drive.google.com/file/d/YOUR_FILE_ID/view";
-                return `
+    // Tạo danh sách games từ orderItems với download buttons
+    const gamesList = orderDetails.orderItems
+      .map((item, index) => {
+        const downloadUrl = downloadLinks[index]?.downloadUrl || "https://drive.google.com/file/d/YOUR_FILE_ID/view";
+        return `
         <tr>
           <td style="padding: 10px; border-bottom: 1px solid #eee;">
             <img src="${item.image}" alt="${item.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
           </td>
           <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.name}</td>
-          <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">$${item.totalPrice.toFixed(2)}</td>
+          <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">${item.totalPrice.toFixed(2)}đ</td>
           <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">
             <a href="${downloadUrl}" style="display: inline-block; padding: 8px 16px; background: #667eea; color: white; text-decoration: none; border-radius: 4px; font-size: 12px;">📥 Tải</a>
           </td>
         </tr>
       `;
-            })
-            .join('');
+      })
+      .join('');
 
-        const mailOptions = {
-            from: `"GameCommerce" <${process.env.EMAIL_USER}>`,
-            to: userEmail,
-            subject: '🎮 Xác nhận mua game thành công - GameCommerce',
-            html: `
+    const mailOptions = {
+      from: `"GameCommerce" <${process.env.EMAIL_USER}>`,
+      to: userEmail,
+      subject: '🎮 Xác nhận mua game thành công - GameCommerce',
+      html: `
         <!DOCTYPE html>
         <html>
         <head>
@@ -106,17 +106,17 @@ const sendPurchaseConfirmationEmail = async (userEmail, orderDetails, downloadLi
         </body>
         </html>
       `
-        };
+    };
 
-        const info = await transporter.sendMail(mailOptions);
-        console.log('✅ Email sent successfully:', info.messageId);
-        return { success: true, messageId: info.messageId };
-    } catch (error) {
-        console.error('❌ Error sending email:', error);
-        throw error;
-    }
+    const info = await transporter.sendMail(mailOptions);
+    console.log('✅ Email sent successfully:', info.messageId);
+    return { success: true, messageId: info.messageId };
+  } catch (error) {
+    console.error('❌ Error sending email:', error);
+    throw error;
+  }
 };
 
 module.exports = {
-    sendPurchaseConfirmationEmail
+  sendPurchaseConfirmationEmail
 };

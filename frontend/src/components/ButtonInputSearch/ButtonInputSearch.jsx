@@ -11,6 +11,7 @@ const ButtonInputSearch = (props) => {
     backgroundColorInput = "#fff",
     backgroundColorButton = "rgb(104, 72, 142)",
     colorButton = "#fff",
+    onButtonClick,
   } = props;
   return (
     <div style={{ display: "flex" }}>
@@ -32,6 +33,7 @@ const ButtonInputSearch = (props) => {
         }}
         textButton={textButton}
         styleTextButton={{ color: colorButton }}
+        onClick={onButtonClick}
       ></ButtonComponent>
     </div>
   );
