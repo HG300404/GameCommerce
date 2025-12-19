@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { WrapperHeader, WrapperUploadFile } from "./style";
+import { WrapperHeader, WrapperUploadFile, DrawerFormWrapper, AvatarPreview } from "./style";
 import { Button, Form, message } from "antd";
 import TableComponent from "../TableComponent/TableComponent";
 import { useSelector } from "react-redux";
@@ -388,115 +388,118 @@ const AdminUser = () => {
         onClose={() => setIsOpenDrawer(false)}
         width="90%"
       >
-        <Form
-          name="basic"
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 18 }}
-          style={{ maxWidth: 600 }}
-          initialValues={{ remember: true }}
-          onFinish={onUpdateUser}
-          autoComplete="on"
-          form={form}
-        >
-          <Form.Item
-            label="UserName"
-            name="userName"
-            rules={[{ required: true, message: "Please input userName!" }]}
+        <DrawerFormWrapper>
+          <Form
+            name="basic"
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 18 }}
+            style={{ maxWidth: 600 }}
+            initialValues={{ remember: true }}
+            onFinish={onUpdateUser}
+            autoComplete="on"
+            form={form}
           >
-            <InputComponent
-              value={stateUserDetails.userName}
-              onChange={handleOnchangeDetails}
+            <Form.Item
+              label="UserName"
               name="userName"
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[{ required: true, message: "Please input email!" }]}
-          >
-            <InputComponent
-              value={stateUserDetails.email}
-              onChange={handleOnchangeDetails}
-              name="email"
-            />
-          </Form.Item>
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: "Please input password!" }]}
-          >
-            <InputComponent
-              value={stateUserDetails.password}
-              onChange={handleOnchangeDetails}
-              name="password"
-            />
-          </Form.Item>
-          <Form.Item
-            label="Admin"
-            name="isAdmin"
-            rules={[{ required: true, message: "Please input isAdmin!" }]}
-          >
-            <InputComponent
-              value={stateUserDetails.isAdmin}
-              onChange={handleOnchangeDetails}
-              name="isAdmin"
-            />
-          </Form.Item>
-          <Form.Item
-            label="Phone"
-            name="phone"
-            rules={[{ required: true, message: "Please input phone!" }]}
-          >
-            <InputComponent
-              value={stateUserDetails.phone}
-              onChange={handleOnchangeDetails}
-              name="phone"
-            />
-          </Form.Item>
-          <Form.Item
-            label="Address"
-            name="address"
-            rules={[{ required: true, message: "Please input address!" }]}
-          >
-            <InputComponent
-              value={stateUserDetails.address}
-              onChange={handleOnchangeDetails}
-              name="address"
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Avatar"
-            name="avatar"
-            rules={[{ required: true, message: "Please input avatar!" }]}
-          >
-            <WrapperUploadFile
-              onChange={handleOnchangeAvatarDetails}
-              maxCount={1}
+              rules={[{ required: true, message: "Please input userName!" }]}
             >
-              <Button type="button">Select File</Button>
+              <InputComponent
+                value={stateUserDetails.userName}
+                onChange={handleOnchangeDetails}
+                name="userName"
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[{ required: true, message: "Please input email!" }]}
+            >
+              <InputComponent
+                value={stateUserDetails.email}
+                onChange={handleOnchangeDetails}
+                name="email"
+              />
+            </Form.Item>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[{ required: true, message: "Please input password!" }]}
+            >
+              <InputComponent
+                value={stateUserDetails.password}
+                onChange={handleOnchangeDetails}
+                name="password"
+              />
+            </Form.Item>
+            <Form.Item
+              label="Admin"
+              name="isAdmin"
+              rules={[{ required: true, message: "Please input isAdmin!" }]}
+            >
+              <InputComponent
+                value={stateUserDetails.isAdmin}
+                onChange={handleOnchangeDetails}
+                name="isAdmin"
+              />
+            </Form.Item>
+            <Form.Item
+              label="Phone"
+              name="phone"
+              rules={[{ required: true, message: "Please input phone!" }]}
+            >
+              <InputComponent
+                value={stateUserDetails.phone}
+                onChange={handleOnchangeDetails}
+                name="phone"
+              />
+            </Form.Item>
+            <Form.Item
+              label="Address"
+              name="address"
+              rules={[{ required: true, message: "Please input address!" }]}
+            >
+              <InputComponent
+                value={stateUserDetails.address}
+                onChange={handleOnchangeDetails}
+                name="address"
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="Avatar"
+              name="avatar"
+              rules={[{ required: true, message: "Please input avatar!" }]}
+            >
+              <WrapperUploadFile
+                onChange={handleOnchangeAvatarDetails}
+                maxCount={1}
+              >
+                <Button type="button">Select File</Button>
+              </WrapperUploadFile>
               {stateUserDetails?.avatar && (
-                <img
-                  src={stateUserDetails?.avatar}
-                  style={{
-                    height: "60px",
-                    width: "60px",
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                    marginLeft: "10px",
-                  }}
-                  alt="game"
-                />
+                <AvatarPreview>
+                  <img
+                    src={stateUserDetails?.avatar}
+                    style={{
+                      height: "80px",
+                      width: "80px",
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                    alt="avatar"
+                  />
+                </AvatarPreview>
               )}
-            </WrapperUploadFile>
-          </Form.Item>
-          <Form.Item wrapperCol={{ offset: 20, span: 16 }}>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
+            </Form.Item>
+            <Form.Item wrapperCol={{ offset: 20, span: 16 }}>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
+        </DrawerFormWrapper>
       </DrawerComponent>
 
       <ModalComponent

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   WrapperContainer,
   WrapperHeaderItem,
@@ -16,6 +16,7 @@ import { useQuery } from "@tanstack/react-query";
 
 const MyOrder = () => {
   const user = useSelector((state) => state.user);
+
   const fetchMyOrder = async () => {
     if (user?.id && user?.access_token) {
       const res = await OrderService.getOrderbyUserId(
@@ -25,119 +26,273 @@ const MyOrder = () => {
       return res;
     }
   };
+
   const queryOrder = useQuery({
     queryKey: ["orders"],
     queryFn: fetchMyOrder,
   });
 
   const { data } = queryOrder;
-  console.log("data", data);
+
+  // Aggregate all games from all orders
+  const allPurchasedGames = useMemo(() => {
+    if (!data?.data) return [];
+
+    const games = [];
+    const orders = Array.isArray(data.data) ? data.data : [data.data];
+
+    orders.forEach((order) => {
+      if (order?.orderItems && Array.isArray(order.orderItems)) {
+        order.orderItems.forEach((item) => {
+          games.push({
+            ...item,
+            orderId: order._id,
+            orderDate: order.createdAt || order.orderDate,
+            isPaid: order.isPaid,
+            paymentMethod: order.paymentMethod,
+          });
+        });
+      }
+    });
+
+    return games;
+  }, [data]);
+
+  // Calculate total spent
+  const totalSpent = useMemo(() => {
+    return allPurchasedGames.reduce((sum, game) => sum + (game.totalPrice || 0), 0);
+  }, [allPurchasedGames]);
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("vi-VN", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+  };
 
   return (
-    <div style={{ with: "100%", height: "100vh" }}>
+    <div style={{ with: "100%", minHeight: "100vh", paddingBottom: "50px" }}>
       <div style={{ height: "100%", width: "1270px", margin: "0 auto" }}>
-        <h2 style={{
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          backgroundClip: "text",
-          fontWeight: "bold",
-          fontSize: "42px",
-          textShadow: "0 4px 8px rgba(102, 126, 234, 0.3)",
-          marginBottom: "20px",
-          display: "flex",
-          alignItems: "center",
-          gap: "10px"
-        }}>
-          🛍️ My Order
+        <h2
+          style={{
+            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+            fontWeight: "bold",
+            fontSize: "42px",
+            textShadow: "0 4px 8px rgba(102, 126, 234, 0.3)",
+            marginBottom: "20px",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+          }}
+        >
+          🛍️ My Purchased Games
         </h2>
+
+        {/* Summary Stats */}
+        <div
+          style={{
+            display: "flex",
+            gap: "20px",
+            marginBottom: "30px",
+          }}
+        >
+          <div
+            style={{
+              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              padding: "20px 30px",
+              borderRadius: "12px",
+              color: "white",
+              flex: 1,
+            }}
+          >
+            <div style={{ fontSize: "14px", opacity: 0.9 }}>Total Games</div>
+            <div style={{ fontSize: "32px", fontWeight: "bold" }}>
+              {allPurchasedGames.length}
+            </div>
+          </div>
+          <div
+            style={{
+              background: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+              padding: "20px 30px",
+              borderRadius: "12px",
+              color: "white",
+              flex: 1,
+            }}
+          >
+            <div style={{ fontSize: "14px", opacity: 0.9 }}>Total Spent</div>
+            <div style={{ fontSize: "32px", fontWeight: "bold" }}>
+              {totalSpent.toLocaleString()} đ
+            </div>
+          </div>
+        </div>
+
         <div style={{ display: "flex", justifyContent: "center" }}>
           <WrapperLeft>
             <WrapperStyleHeader
               style={{
                 background: "#483D8B",
-                fontSize: "30px",
+                fontSize: "20px",
                 color: "#FFF",
                 fontFamily: "Helvetica",
+                padding: "15px 20px",
               }}
             >
               <div
                 style={{
-                  flex: 1,
-                  display: "flex",
+                  display: "grid",
+                  gridTemplateColumns: "300px 120px 100px 120px 150px",
+                  gap: "20px",
                   alignItems: "center",
-                  gap: "545px",
                 }}
               >
                 <span
                   style={{
                     color: "#FFFF00",
-                    fontSize: "20px",
+                    fontSize: "16px",
                     fontWeight: "bold",
                   }}
                 >
-                  Name
+                  Game Name
                 </span>
                 <span
                   style={{
                     color: "#FFFF00",
-                    fontSize: "20px",
+                    fontSize: "16px",
                     fontWeight: "bold",
                   }}
                 >
                   Price
                 </span>
+                <span
+                  style={{
+                    color: "#FFFF00",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Discount
+                </span>
+                <span
+                  style={{
+                    color: "#FFFF00",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Total
+                </span>
+                <span
+                  style={{
+                    color: "#FFFF00",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Purchase Date
+                </span>
               </div>
             </WrapperStyleHeader>
+
             <WrapperListOrder>
-              {data?.data?.orderItems && data?.data?.orderItems?.length > 0 ? (
-                data?.data?.orderItems?.map((order, index) => {
+              {allPurchasedGames && allPurchasedGames.length > 0 ? (
+                allPurchasedGames.map((game, index) => {
                   return (
                     <WrapperItemOrder key={index}>
                       <div
                         style={{
-                          width: "600px",
-                          display: "flex",
+                          display: "grid",
+                          gridTemplateColumns: "300px 120px 100px 120px 150px",
+                          gap: "20px",
                           alignItems: "center",
-                          gap: 4,
+                          width: "100%",
                         }}
                       >
-                        <img
-                          src={order?.image}
-                          style={{
-                            width: "77px",
-                            height: "79px",
-                            objectFit: "cover",
-                          }}
-                          alt="game"
-                        />
-
+                        {/* Game Name with Image */}
                         <div
                           style={{
-                            width: 260,
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                            fontSize: "18px",
-                            color: "#4B0082",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
                           }}
                         >
-                          {order?.name}
+                          <img
+                            src={game?.image}
+                            style={{
+                              width: "60px",
+                              height: "60px",
+                              objectFit: "cover",
+                              borderRadius: "8px",
+                            }}
+                            alt="game"
+                          />
+                          <div
+                            style={{
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                              fontSize: "16px",
+                              color: "#4B0082",
+                              fontWeight: "500",
+                            }}
+                          >
+                            {game?.name}
+                          </div>
                         </div>
-                      </div>
-                      <div
-                        style={{
-                          flex: 1,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <span>
-                          <span style={{ fontSize: "18px", color: "#4B0082" }}>
-                            ${order?.totalPrice}
-                          </span>
+
+                        {/* Price */}
+                        <span style={{ fontSize: "16px", color: "#4B0082" }}>
+                          {game?.price?.toLocaleString()} đ
                         </span>
+
+                        {/* Discount */}
+                        <span
+                          style={{
+                            fontSize: "16px",
+                            color: game?.discount > 0 ? "#e74c3c" : "#4B0082",
+                            fontWeight: game?.discount > 0 ? "bold" : "normal",
+                          }}
+                        >
+                          {game?.discount || 0}%
+                        </span>
+
+                        {/* Total Price */}
+                        <span
+                          style={{
+                            fontSize: "16px",
+                            color: "#4B0082",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {game?.totalPrice?.toLocaleString()} đ
+                        </span>
+
+                        {/* Purchase Date */}
+                        <div>
+                          <div
+                            style={{
+                              fontSize: "14px",
+                              color: "#4B0082",
+                            }}
+                          >
+                            {formatDate(game?.orderDate)}
+                          </div>
+                          <div
+                            style={{
+                              fontSize: "12px",
+                              color: game?.isPaid ? "#27ae60" : "#e74c3c",
+                              fontWeight: "500",
+                              marginTop: "2px",
+                            }}
+                          >
+                            {game?.isPaid ? "✓ Paid" : "✗ Unpaid"}
+                          </div>
+                        </div>
                       </div>
                     </WrapperItemOrder>
                   );
@@ -152,32 +307,38 @@ const MyOrder = () => {
                   }}
                 >
                   <p style={{ fontSize: "24px", marginBottom: "10px" }}>📦</p>
-                  <p>You don't have any orders yet</p>
-                  <p style={{ fontSize: "14px", color: "#ccc", marginTop: "10px" }}>
-                    Start shopping to see your orders here!
+                  <p>You don't have any purchased games yet</p>
+                  <p
+                    style={{
+                      fontSize: "14px",
+                      color: "#ccc",
+                      marginTop: "10px",
+                    }}
+                  >
+                    Start shopping to see your games here!
                   </p>
                 </div>
               )}
             </WrapperListOrder>
-            {data?.data?.totalPrice && (
+
+            {allPurchasedGames.length > 0 && (
               <WrapperStyleHeader
                 style={{
                   background: "#483D8B",
-                  fontSize: "30px",
+                  fontSize: "20px",
                   color: "#FFF",
                   fontFamily: "Helvetica",
+                  padding: "15px 20px",
                 }}
               >
-                <span style={{ display: "inline-block", width: "390px" }}>
-                  <span
-                    style={{
-                      color: "#FFFF00",
-                      fontSize: "20px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Total Price: ${data?.data?.totalPrice}
-                  </span>
+                <span
+                  style={{
+                    color: "#FFFF00",
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Total Spent: {totalSpent.toLocaleString()} đ ({allPurchasedGames.length} games)
                 </span>
               </WrapperStyleHeader>
             )}
@@ -188,3 +349,4 @@ const MyOrder = () => {
   );
 };
 export default MyOrder;
+

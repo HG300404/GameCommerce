@@ -1,25 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { getItem } from "../../utils";
-import { Menu } from "antd";
+import React, { useState } from "react";
 import {
   AppstoreOutlined,
   UserOutlined,
-  FileTextOutlined,
+  ShoppingOutlined,
 } from "@ant-design/icons";
 import HeaderComponent from "../../components/HeaderComponent/HeaderComponent";
 import AdminGame from "../../components/AdminGame/AdminGame";
 import AdminUser from "../../components/AdminUser/AdminUser";
 import AdminOrder from "../../components/AdminOrder/AdminOrder";
+import {
+  AdminContainer,
+  MenuWrapper,
+  MenuHeader,
+  MenuItem,
+  ContentWrapper,
+} from "./style";
 
 const AdminPage = () => {
-  const items = [
-    getItem("Game", "games", <AppstoreOutlined />),
-    getItem("User", "users", <UserOutlined />),
-    getItem("Order", "orders", <FileTextOutlined />),
+  const [keySelected, setKeySelected] = useState("games");
 
+  const menuItems = [
+    { key: "games", icon: <AppstoreOutlined />, label: "Games" },
+    { key: "users", icon: <UserOutlined />, label: "Users" },
+    { key: "orders", icon: <ShoppingOutlined />, label: "Orders" },
   ];
-
-  const [keySelected, setKeySelected] = useState("");
 
   const renderPage = (key) => {
     switch (key) {
@@ -34,31 +38,37 @@ const AdminPage = () => {
     }
   };
 
-  const handleOnCLick = ({ key }) => {
+  const handleMenuClick = (key) => {
     setKeySelected(key);
   };
-  console.log("keySelected", keySelected);
 
   return (
     <>
       <HeaderComponent isHiddenCart isHiddenSearch isZoom />
 
-      <div style={{ display: "flex", overflowX: "hidden" }}>
-        <Menu
-          mode="inline"
-          style={{
-            width: 256,
-            boxShadow: "1px 1px 2px #ccc",
-            height: "100vh",
-          }}
-          items={items}
-          onClick={handleOnCLick}
-        />
-        <div style={{ flex: 1, padding: "20px" }}>
-          {renderPage(keySelected)}
-        </div>
-      </div>
+      <AdminContainer>
+        <MenuWrapper>
+          <MenuHeader>
+            <h2>Admin Panel</h2>
+            <p>Management System</p>
+          </MenuHeader>
+
+          {menuItems.map((item) => (
+            <MenuItem
+              key={item.key}
+              active={keySelected === item.key}
+              onClick={() => handleMenuClick(item.key)}
+            >
+              <span className="icon">{item.icon}</span>
+              <span className="label">{item.label}</span>
+            </MenuItem>
+          ))}
+        </MenuWrapper>
+
+        <ContentWrapper>{renderPage(keySelected)}</ContentWrapper>
+      </AdminContainer>
     </>
   );
 };
+
 export default AdminPage;

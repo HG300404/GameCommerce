@@ -47,7 +47,6 @@ const HomePage = () => {
     retryDelay: 1000,
   });
 
-  fetchGameAll();
   useEffect(() => {
     if (refSearch.current) {
       fetchGameAll(searchGame);
